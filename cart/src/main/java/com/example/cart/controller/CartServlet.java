@@ -16,6 +16,12 @@ import java.util.Date;
 @WebServlet(name = "CartServlet", urlPatterns = { "/cart" })
 public class CartServlet extends HttpServlet {
 
+    /**
+     * Ten cookie nho san pham cuoi cung duoc them vao gio (Ex 9-1: c:if + cookie).
+     */
+    public static final String LAST_PRODUCT_COOKIE = "lastProduct";
+    private static final int TWO_YEARS_IN_SECONDS = 60 * 60 * 24 * 365 * 2;
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -54,6 +60,9 @@ public class CartServlet extends HttpServlet {
             } else if (action.equals("add")) {
                 Product product = ProductDAO.getProduct(productCode);
                 cart.addItem(product, 1);
+                if (product != null) {
+                    rememberLastProduct(request, response, product.getCode());
+                }
                 page = "cart";
 
             } else if (action.equals("update")) {
@@ -83,7 +92,8 @@ public class CartServlet extends HttpServlet {
             request.setAttribute("products", ProductDAO.getProducts());
         }
 
-        // Ch8 (Ex 8-1): ngay hien tai la request attribute -> ${requestScope.currentDate}
+        // Ch8 (Ex 8-1): ngay hien tai la request attribute ->
+        // ${requestScope.currentDate}
         request.setAttribute("currentDate", new Date());
 
         // forward to the view
@@ -91,5 +101,14 @@ public class CartServlet extends HttpServlet {
         getServletContext()
                 .getRequestDispatcher(url)
                 .forward(request, response);
+    }
+
+    private void rememberLastProduct(HttpServletRequest request, HttpServletResponse response, String code) {
+        Cookie cookie = new Cookie(LAST_PRODUCT_COOKIE, code);
+        cookie.setMaxAge(TWO_YEARS_IN_SECONDS);
+        String path = request.getContextPath();
+        cookie.setPath(path.isEmpty() ? "/" : path);
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
     }
 }
