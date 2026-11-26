@@ -1,0 +1,44 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 24px;
+}
+
+h2 {
+    color: #008080;
+}
+
+table {
+    border-collapse: collapse;
+    border: 1px solid #000;
+}
+
+th,
+td {
+    border: 1px solid #000;
+    padding: 6px 12px;
+    text-align: left;
+}
+
+.right {
+    text-align: right;
+}
+
+tr.odd {
+    background: #f1f8f8;
+}
+
+.msg {
+    padding: 8px 12px;
+    background: #eef7ee;
+    border: 1px solid #b6d7b6;
+    display: inline-block;
+}
+
+
+footer {
+    margin-top: 24px;
+    font-size: 0.9em;
+    color: #444;
+    border-top: 1px solid #999;
+    padding-top: 8px;
+}
